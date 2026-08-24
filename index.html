@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Donor Finder</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="blood-icon">🩸</span>
+                <span class="brand-text">Blood Donor Finder</span>
+            </div>
+            <button class="mobile-menu-toggle" id="menuToggle" aria-label="Toggle navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu" id="navLinks">
+                <li><a href="#home" class="nav-link active">Home</a></li>
+                <li><a href="#find-donor" class="nav-link">Find Donor</a></li>
+                <li><a href="#become-donor" class="nav-link">Become a Donor</a></li>
+                <li><a href="#blood-request" class="nav-link">Blood Request</a></li>
+                <li><a href="#emergency" class="nav-link">Emergency</a></li>
+                <li><a href="#dashboard" class="nav-link">Dashboard</a></li>
+                <li><a href="#compatibility" class="nav-link">Compatibility</a></li>
+            </ul>
+            <button class="dark-mode-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+        </div>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home" class="section active">
+        <div class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">Save Lives Through Blood Donation</h1>
+                <p class="hero-description">Connect with blood donors in your area. Every donation can save up to three lives.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="navigateTo('find-donor')">Find a Donor</button>
+                    <button class="btn btn-secondary" onclick="navigateTo('become-donor')">Become a Donor</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Section -->
+        <div class="stats-section">
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-number" id="totalDonors">0</div>
+                    <div class="stat-label">Total Donors</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📋</div>
+                    <div class="stat-number" id="totalRequests">0</div>
+                    <div class="stat-label">Blood Requests</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-number" id="successfulConnections">0</div>
+                    <div class="stat-label">Successful Connections</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Emergency Blood Request Section -->
+        <div class="emergency-section">
+            <h2 class="section-title">Emergency Blood Requests</h2>
+            <div class="emergency-requests" id="homeEmergencyRequests">
+                <!-- Emergency requests will be displayed here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Find Donor Section -->
+    <section id="find-donor" class="section">
+        <div class="container">
+            <h2 class="section-title">Find a Blood Donor</h2>
+            
+            <!-- Search Form -->
+            <div class="search-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="searchBloodGroup">Blood Group</label>
+                        <select id="searchBloodGroup" class="form-control">
+                            <option value="">All Blood Groups</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="searchCity">City</label>
+                        <input type="text" id="searchCity" class="form-control" placeholder="Enter city name">
+                    </div>
+                    <div class="form-group">
+                        <label for="searchAvailability">Availability</label>
+                        <select id="searchAvailability" class="form-control">
+                            <option value="">All</option>
+                            <option value="Available">Available</option>
+                            <option value="Not Available">Not Available</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="searchName">Donor Name</label>
+                        <input type="text" id="searchName" class="form-control" placeholder="Search by name">
+                    </div>
+                </div>
+                <div class="form-buttons">
+                    <button class="btn btn-primary" onclick="searchDonors()">Search Donors</button>
+                    <button class="btn btn-secondary" onclick="resetSearch()">Reset</button>
+                </div>
+            </div>
+
+            <!-- Search Results -->
+            <div class="donors-grid" id="donorsGrid">
+                <!-- Donor cards will be displayed here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Become a Donor Section -->
+    <section id="become-donor" class="section">
+        <div class="container">
+            <h2 class="section-title">Become a Blood Donor</h2>
+            <p class="section-description">Register as a donor and help save lives in your community.</p>
+            
+            <form id="donorForm" class="registration-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="donorName">Full Name *</label>
+                        <input type="text" id="donorName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="donorAge">Age *</label>
+                        <input type="number" id="donorAge" class="form-control" min="18" max="65" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="donorGender">Gender *</label>
+                        <select id="donorGender" class="form-control" required>
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="donorBloodGroup">Blood Group *</label>
+                        <select id="donorBloodGroup" class="form-control" required>
+                            <option value="">Select Blood Group</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="donorPhone">Phone Number *</label>
+                        <input type="tel" id="donorPhone" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="donorEmail">Email *</label>
+                        <input type="email" id="donorEmail" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="donorCity">City *</label>
+                        <input type="text" id="donorCity" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="donorArea">Area/Locality</label>
+                        <input type="text" id="donorArea" class="form-control">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="donorLastDonation">Last Donation Date</label>
+                        <input type="date" id="donorLastDonation" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="donorAvailability">Availability *</label>
+                        <select id="donorAvailability" class="form-control" required>
+                            <option value="">Select Availability</option>
+                            <option value="Available">Available</option>
+                            <option value="Not Available">Not Available</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-buttons">
+                    <button type="submit" class="btn btn-primary">Register as Donor</button>
+                    <button type="reset" class="btn btn-secondary">Reset Form</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Blood Request Section -->
+    <section id="blood-request" class="section">
+        <div class="container">
+            <h2 class="section-title">Request Blood</h2>
+            <p class="section-description">Submit a blood request and connect with donors in your area.</p>
+            
+            <form id="bloodRequestForm" class="registration-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="patientName">Patient Name *</label>
+                        <input type="text" id="patientName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="requestBloodGroup">Blood Group Required *</label>
+                        <select id="requestBloodGroup" class="form-control" required>
+                            <option value="">Select Blood Group</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="hospitalName">Hospital Name *</label>
+                        <input type="text" id="hospitalName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="requestCity">City *</label>
+                        <input type="text" id="requestCity" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="requiredUnits">Required Units *</label>
+                        <input type="number" id="requiredUnits" class="form-control" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactNumber">Contact Number *</label>
+                        <input type="tel" id="contactNumber" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="requiredDate">Required Date *</label>
+                        <input type="date" id="requiredDate" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="isEmergency">
+                            <span>Emergency Request</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-buttons">
+                    <button type="submit" class="btn btn-primary">Submit Request</button>
+                    <button type="reset" class="btn btn-secondary">Reset Form</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Emergency Section -->
+    <section id="emergency" class="section">
+        <div class="container">
+            <h2 class="section-title">Emergency Blood Requests</h2>
+            <div class="emergency-requests" id="emergencyRequests">
+                <!-- Emergency requests will be displayed here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="section">
+        <div class="container">
+            <h2 class="section-title">Dashboard</h2>
+            
+            <div class="dashboard-stats">
+                <div class="dashboard-card">
+                    <div class="dashboard-icon">👥</div>
+                    <div class="dashboard-number" id="dashTotalDonors">0</div>
+                    <div class="dashboard-label">Total Registered Donors</div>
+                </div>
+                <div class="dashboard-card">
+                    <div class="dashboard-icon">✅</div>
+                    <div class="dashboard-number" id="dashAvailableDonors">0</div>
+                    <div class="dashboard-label">Available Donors</div>
+                </div>
+                <div class="dashboard-card">
+                    <div class="dashboard-icon">📋</div>
+                    <div class="dashboard-number" id="dashTotalRequests">0</div>
+                    <div class="dashboard-label">Total Blood Requests</div>
+                </div>
+                <div class="dashboard-card">
+                    <div class="dashboard-icon">🚨</div>
+                    <div class="dashboard-number" id="dashEmergencyRequests">0</div>
+                    <div class="dashboard-label">Emergency Requests</div>
+                </div>
+                <div class="dashboard-card">
+                    <div class="dashboard-icon">✅</div>
+                    <div class="dashboard-number" id="dashFulfilledRequests">0</div>
+                    <div class="dashboard-label">Fulfilled Requests</div>
+                </div>
+            </div>
+
+            <!-- Blood Group Statistics -->
+            <div class="blood-group-stats">
+                <h3 class="subsection-title">Blood Group Distribution</h3>
+                <div class="blood-group-chart" id="bloodGroupChart">
+                    <!-- Blood group statistics will be displayed here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Compatibility Checker Section -->
+    <section id="compatibility" class="section">
+        <div class="container">
+            <h2 class="section-title">Blood Compatibility Checker</h2>
+            <p class="section-description">Check if a donor's blood is compatible with the recipient.</p>
+            
+            <div class="compatibility-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="donorBloodGroupCompat">Donor Blood Group</label>
+                        <select id="donorBloodGroupCompat" class="form-control">
+                            <option value="">Select Donor Blood Group</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipientBloodGroup">Recipient Blood Group</label>
+                        <select id="recipientBloodGroup" class="form-control">
+                            <option value="">Select Recipient Blood Group</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-buttons">
+                    <button class="btn btn-primary" onclick="checkCompatibility()">Check Compatibility</button>
+                </div>
+                <div class="compatibility-result" id="compatibilityResult"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Toast Notification -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
